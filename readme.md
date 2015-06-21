@@ -8,7 +8,7 @@
 ## Install
 
 ```
-$ npm install --save download-cli
+$ npm install --global download-cli
 ```
 
 
