@@ -8,7 +8,7 @@ test('show help screen', function (t) {
 	t.plan(1);
 
 	var concat = concatStream(end);
-	var cp = spawn(path.join(__dirname, '../cli.js'), ['--help']);
+	var cp = spawn(path.join(__dirname, 'cli.js'), ['--help']);
 
 	function end(str) {
 		t.assert(/Download and extract files/.test(str), str);
@@ -22,8 +22,8 @@ test('show version', function (t) {
 	t.plan(1);
 
 	var concat = concatStream(end);
-	var cp = spawn(path.join(__dirname, '../cli.js'), ['--version']);
-	var version = require('../package.json').version;
+	var cp = spawn(path.join(__dirname, 'cli.js'), ['--version']);
+	var version = require('./package.json').version;
 
 	function end(str) {
 		t.assert(str.trim() === version, str);
