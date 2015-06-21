@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 'use strict';
-
 var meow = require('meow');
 var getStdin = require('get-stdin');
-var Download = require('./');
+var Download = require('download');
 
 var cli = meow({
 	help: [
@@ -23,7 +22,7 @@ var cli = meow({
 		'  -e, --extract           Try decompressing the file',
 		'  -o, --out               Where to place the downloaded files',
 		'  -s, --strip <number>    Strip leading paths from file names on extraction'
-	].join('\n')
+	]
 }, {
 	boolean: [
 		'extract'

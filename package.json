@@ -1,0 +1,42 @@
+{
+  "name": "download-cli",
+  "version": "1.0.0",
+  "description": "Download and extract files",
+  "license": "MIT",
+  "repository": "kevva/download-cli",
+  "author": {
+    "name": "Kevin Mårtensson",
+    "email": "kevinmartensson@gmail.com",
+    "url": "github.com/kevva"
+  },
+  "bin": {
+    "download": "cli.js"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "files": [
+    "cli.js"
+  ],
+  "keywords": [
+    "cli",
+    "cli-app",
+    "download",
+    "extract",
+    "http",
+    "request",
+    "url"
+  ],
+  "dependencies": {
+    "get-stdin": "^4.0.1",
+    "download": "^3.2.0",
+    "meow": "^3.3.0"
+  },
+  "devDependencies": {
+    "ava": "^0.0.4",
+    "concat-stream": "^1.5.0"
+  }
+}
