@@ -1,29 +1,24 @@
 #!/usr/bin/env node
 'use strict';
-var meow = require('meow');
-var getStdin = require('get-stdin');
-var Download = require('download');
+const meow = require('meow');
+const download = require('download');
 
-var cli = meow({
-	help: [
-		'Usage',
-		'  $ download <url>',
-		'  $ download <url> > <file>',
-		'  $ download --out <directory> <url>',
-		'  $ cat <file> | download --out <directory>',
-		'',
-		'Example',
-		'  $ download http://foo.com/file.zip',
-		'  $ download http://foo.com/cat.png > dog.png',
-		'  $ download --extract --strip 1 --out dest http://foo.com/file.zip',
-		'  $ cat urls.txt | download --out dest',
-		'',
-		'Options',
-		'  -e, --extract           Try decompressing the file',
-		'  -o, --out               Where to place the downloaded files',
-		'  -s, --strip <number>    Strip leading paths from file names on extraction'
-	]
-}, {
+const cli = meow(`
+	Usage
+	  $ download <url>
+	  $ download <url> > <file>
+	  $ download --out <directory> <url>
+
+	Example
+	  $ download http://foo.com/file.zip
+	  $ download http://foo.com/cat.png > dog.png
+	  $ download --extract --strip 1 --out dest http://foo.com/file.zip
+
+	Options
+	  -e, --extract         Try decompressing the file
+	  -o, --out             Where to place the downloaded files
+	  -s, --strip <number>  Strip leading paths from file names on extraction
+`, {
 	boolean: [
 		'extract'
 	],
@@ -35,60 +30,12 @@ var cli = meow({
 		e: 'extract',
 		o: 'out',
 		s: 'strip'
-	},
-	default: {
-		out: process.cwd()
 	}
 });
 
-function run(src, dest) {
-	var download = new Download(cli.flags);
-
-	src.forEach(download.get.bind(download));
-
-	if (process.stdout.isTTY) {
-		download.dest(dest);
-	}
-
-	download.run(function (err, files) {
-		if (err) {
-			console.error(err.message);
-			process.exit(1);
-		}
-
-		if (!process.stdout.isTTY) {
-			files.forEach(function (file) {
-				process.stdout.write(file.contents);
-			});
-		}
-	});
+if (cli.input.length === 0) {
+	console.error('Specify a URL');
+	process.exit(1);
 }
 
-if (process.stdin.isTTY) {
-	var src = cli.input;
-	var dest = cli.flags.out;
-
-	if (!src.length){
-		console.error([
-			'Specify a URL to fetch',
-			'',
-			'Example',
-			'  $ download http://foo.com/file.zip',
-			'  $ download http://foo.com/cat.png > dog.png',
-			'  $ download --extract --strip 1 --out dest http://foo.com/file.zip',
-			'  $ cat urls.txt | download --out dest'
-		].join('\n'));
-
-		process.exit(1);
-	}
-
-	run(src, dest);
-} else {
-	getStdin(function (data) {
-		var src = cli.input;
-		var dest = cli.flags.out;
-
-		[].push.apply(src, data.trim().split('\n'));
-		run(src, dest);
-	});
-}
+download(cli.input[0], cli.flags.out, cli.flags).pipe(process.stdout);
