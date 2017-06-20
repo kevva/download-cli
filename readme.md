@@ -31,6 +31,7 @@ $ download --help
     -e, --extract         Try decompressing the file
     -o, --out             Where to place the downloaded files
     -s, --strip <number>  Strip leading paths from file names on extraction
+    --filename <string>   Name of the saved file
 ```
 
 

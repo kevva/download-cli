@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "ava": "*",
-    "execa": "^0.6.3",
+    "execa": "^0.7.0",
     "path-exists": "^3.0.0",
     "rimraf": "^2.6.1",
     "xo": "*"
