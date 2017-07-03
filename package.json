@@ -1,6 +1,6 @@
 {
   "name": "download-cli",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Download and extract files",
   "license": "MIT",
   "repository": "kevva/download-cli",
