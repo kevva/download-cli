@@ -41,4 +41,8 @@ if (cli.input.length === 0) {
 	process.exit(1);
 }
 
-download(cli.input[0], cli.flags.out, cli.flags).pipe(process.stdout);
+const dl = download(cli.input[0], cli.flags.out, cli.flags);
+
+if (!cli.flags.out) {
+	dl.pipe(process.stdout);
+}
