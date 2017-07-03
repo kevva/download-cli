@@ -20,8 +20,10 @@ const cli = meow(`
 	  -s, --strip <number>  Strip leading paths from file names on extraction
 	  --filename <string>   Name of the saved file
 	  --proxy <string>      Proxy endpoint
+	  --no-pipe             Don't pipe to stdout
 `, {
 	boolean: [
+		'nopipe',
 		'extract'
 	],
 	string: [
@@ -41,4 +43,8 @@ if (cli.input.length === 0) {
 	process.exit(1);
 }
 
-download(cli.input[0], cli.flags.out, cli.flags).pipe(process.stdout);
+let stream = download(cli.input[0], cli.flags.out, cli.flags)
+
+if(!cli.flags.nopipe) {
+	stream.pipe(process.stdout);
+}
