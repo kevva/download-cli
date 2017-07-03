@@ -27,8 +27,7 @@ const cli = meow(`
 	string: [
 		'filename',
 		'out',
-		'proxy',
-		'strip'
+		'proxy'
 	],
 	alias: {
 		e: 'extract',
