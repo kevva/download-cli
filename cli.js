@@ -53,8 +53,10 @@ const getOptions = flags => {
 		return flags;
 	}
 
+	const headers = Array.isArray(flags.header) ? flags.header : [flags.header];
+
 	const opts = Object.assign(flags, {
-		headers: flags.header.reduce((obj, x) => {
+		headers: headers.reduce((obj, x) => {
 			const header = parseHeader(x);
 			return Object.assign(obj, {[header[0]]: header[1]});
 		}, {})
