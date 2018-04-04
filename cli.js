@@ -13,6 +13,7 @@ const cli = meow(`
 	  $ download http://foo.com/file.zip
 	  $ download http://foo.com/cat.png > dog.png
 	  $ download --extract --strip 1 --out dest http://foo.com/file.zip
+	  $ download --header 'authorization: Basic foo:bar' http://foo.com/file.zip
 
 	Options
 	  -e, --extract         Try decompressing the file
@@ -20,6 +21,7 @@ const cli = meow(`
 	  -s, --strip <number>  Strip leading paths from file names on extraction
 	  --filename <string>   Name of the saved file
 	  --proxy <string>      Proxy endpoint
+	  --header <string>     HTTP header. Can be set multiple times
 `, {
 	boolean: [
 		'extract'
@@ -41,7 +43,29 @@ if (cli.input.length === 0) {
 	process.exit(1);
 }
 
-const dl = download(cli.input[0], cli.flags.out, cli.flags);
+const parseHeader = header => {
+	const arr = header.split(/:([^]+)/);
+	return [arr[0], arr[1]];
+};
+
+const getOptions = flags => {
+	if (!flags.header) {
+		return flags;
+	}
+
+	const opts = Object.assign(flags, {
+		headers: flags.header.reduce((obj, x) => {
+			const header = parseHeader(x);
+			return Object.assign(obj, {[header[0]]: header[1]});
+		}, {})
+	});
+
+	delete opts.header;
+
+	return opts;
+};
+
+const dl = download(cli.input[0], cli.flags.out, getOptions(cli.flags));
 
 if (!cli.flags.out) {
 	dl.pipe(process.stdout);

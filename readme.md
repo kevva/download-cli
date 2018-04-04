@@ -26,6 +26,7 @@ $ download --help
     $ download http://foo.com/file.zip
     $ download http://foo.com/cat.png > dog.png
     $ download --extract --strip 1 --out dest http://foo.com/file.zip
+    $ download --header 'authorization: Basic foo:bar' http://foo.com/file.zip
 
   Options
     -e, --extract         Try decompressing the file
@@ -33,6 +34,7 @@ $ download --help
     -s, --strip <number>  Strip leading paths from file names on extraction
     --filename <string>   Name of the saved file
     --proxy <string>      Proxy endpoint
+    --header <string>     HTTP header. Can be set multiple times
 ```
 
 
