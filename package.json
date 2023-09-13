@@ -9,7 +9,7 @@
     "email": "kevinmartensson@gmail.com",
     "url": "github.com/kevva"
   },
-	"type": "module",
+  "type": "module",
   "bin": {
     "download": "cli.js"
   },
