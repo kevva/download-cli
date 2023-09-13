@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-'use strict';
-const meow = require('meow');
-const download = require('download');
+
+import process from 'node:process';
+import meow from 'meow';
+import download from 'download';
 
 const cli = meow(`
 	Usage
@@ -23,19 +24,20 @@ const cli = meow(`
 	  --proxy <string>      Proxy endpoint
 	  --header <string>     HTTP header. Can be set multiple times
 `, {
+	importMeta: import.meta,
 	boolean: [
-		'extract'
+		'extract',
 	],
 	string: [
 		'filename',
 		'out',
-		'proxy'
+		'proxy',
 	],
 	alias: {
 		e: 'extract',
 		o: 'out',
-		s: 'strip'
-	}
+		s: 'strip',
+	},
 });
 
 if (cli.input.length === 0) {
@@ -44,8 +46,19 @@ if (cli.input.length === 0) {
 }
 
 const parseHeader = header => {
-	const arr = header.split(/:([^]+)/);
-	return [arr[0], arr[1]];
+	const headerSplit = header.split(/:([^]+)/);
+	return [headerSplit[0], headerSplit[1]];
+};
+
+const toHeaderObject = headers => {
+	const headerObject = {};
+
+	for (const headerString of headers) {
+		const header = parseHeader(headerString);
+		headerObject[header[0]] = header[1];
+	}
+
+	return headerObject;
 };
 
 const getOptions = flags => {
@@ -55,16 +68,13 @@ const getOptions = flags => {
 
 	const headers = Array.isArray(flags.header) ? flags.header : [flags.header];
 
-	const opts = Object.assign(flags, {
-		headers: headers.reduce((obj, x) => {
-			const header = parseHeader(x);
-			return Object.assign(obj, {[header[0]]: header[1]});
-		}, {})
+	const options = Object.assign(flags, {
+		headers: toHeaderObject(headers),
 	});
 
-	delete opts.header;
+	delete options.header;
 
-	return opts;
+	return options;
 };
 
 const dl = download(cli.input[0], cli.flags.out, getOptions(cli.flags));
